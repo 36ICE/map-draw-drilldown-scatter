@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+    <div id="main" style=" width:100%; height: 500px;"></div>
+    <script src="https://cdn.bootcss.com/jquery/3.3.0/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/echarts/4.1.0.rc2/echarts-en.min.js"></script>
+    <script>
+
+            var data = [
+         {name: '标记1', value: '2'},
+         {name: '标记2', value: '2'},
+         {name: '标记1', value: '2'},
+         {name: '标记2', value: '2'}
+    ];
+    var geoCoordMap = {
+    '标记1':[118.8995634767755,32.07442922894555],
+    '标记2':[118.9995634767755,32.17442922894555]
+    
+    }
+        //根据data得到每个data中城市的坐标
+        var convertData = function (data) {
+            var res = [];
+            for (var i = 0; i < data.length; i++) {
+                var fromCoord = geoCoordMap[data[i].name];//获取城市的坐标 source
+                var toCoord = geoCoordMap[data[i].value];//获取城市的坐标 destination
+                if (fromCoord && toCoord) {
+                    res.push({
+                        fromName: data[i].name,
+                        toName: data[i].value,
+                        coords: [fromCoord, toCoord]
+                    });
+                }
+            }
+            return res;
+        };
+        //根据data得到放射光标效果图。如果起始城市没有值的话，就只显示目的城市
+        var convertData1 = function (data) { 
+            var res = [];
+            for (var i = 0; i < data.length; i++) {
+                var geoCoord = geoCoordMap[data[i].name];
+                var geoCoord1 = geoCoordMap[data[i].value];
+                if (geoCoord) 
+                {
+                    res.push({
+                        name: data[i].name,
+                        value: geoCoord.concat(data[i].value)
+                    });
+                }
+                if(geoCoord1)
+                {
+                    res.push({
+                        name: data[i].value,
+                        value: geoCoord1.concat(data[i].name)
+                    })
+                }
+            }
+            return res;
+        };
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+        myChart.showLoading();
+    
+        $.get('http://localhost:8080/map.json', function (geoJson) {
+    
+            myChart.hideLoading();
+    
+            echarts.registerMap('xixiaqu', geoJson);
+    
+            myChart.setOption(option = {
+                title: {
+                    text: '栖霞区掌上云社区360度全域治理平台',
+                    subtext: '萌泰科技',
+                    sublink: 'http://www.monetware.com/',
+                    left:'center'
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{b}<br/>{c} (情况)'
+                },
+                geo: {
+                    map: 'xixiaqu',
+                    label: {
+                        emphasis: {
+                            show: true
+                        }
+                    },
+                    //是否可以点击鼠标、滚轮缩放
+                    roam: true,
+                },
+            
+                series: [
+                  /**  {
+                        name: '全域治理',
+                        type: 'map',
+                        mapType: 'xixiaqu', // 自定义扩展图表类型
+                        itemStyle:{
+                            normal:{label:{show:true}},
+                            emphasis:{label:{show:true}}
+                        },
+                        label: {
+                            normal: {
+                                show: true,//显示省份标签
+                                textStyle:{color:"#c71585"}//省份标签字体颜色
+                            },    
+                            emphasis: {//对应的鼠标悬浮效果
+                                show: true,
+                                textStyle:{color:"#800080"}
+                            } 
+                        },
+                        data:[
+                            {name: '八卦洲街道', value: 118.34},
+                            {name: '马群街道', value: 15477.48},
+                            {name: '迈皋桥街道', value: 31686.1},
+                            {name: '燕子矶街道', value: 6992.6},
+                            {name: '西岗街道', value: 44045.49},
+                            {name: '龙潭街道', value: 40689.64},
+                            {name: '栖霞街道', value: 37659.78},
+                            {name: 'monetware', value: 45180.97},
+                            {name: 'demo', value: 55204.26},
+                            {name: '仙林街道', value: 21900.9}
+                        
+                        ],
+                        // 自定义名称映射
+                        nameMap: {
+                            'Central and Western': '八卦洲街道',
+                            'Eastern': '迈皋桥街道',
+                            'Islands': 'demo',
+                            'Kowloon City': '栖霞街道',
+                            'Kwai Tsing': 'monetware',
+                            'Kwun Tong': '西岗街道',
+                            'North': '燕子矶街道',
+                            'Sai Kung': '马群街道',
+                            'Sha Tin': '仙林街道',
+                            'Sham Shui Po': '龙潭街道',
+                            'Southern': '燕子矶街道'
+                        
+                        }
+                        
+                    },
+                    **/
+                    {
+                    name: 'city',
+                    type: 'effectScatter',
+                    coordinateSystem: 'geo',
+                    rippleEffect: {
+                        brushType: 'stroke'
+                    },
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'right',
+                            formatter: '{b}'
+                        }  
+                    },
+                    symbolSize: 8,
+                    itemStyle: {
+                        normal: {
+                            color: '#389BB7'
+                        }
+                    },
+                    data: convertData1(data)
+                 },
+                ]
+            });
+            myChart.on('mouseover', function (params) {
+                var dataIndex = params.dataIndex;
+               // console.log(params);
+            });
+            window.onresize = myChart.resize;
+        });
+    </script>
+</body>
+</html>
