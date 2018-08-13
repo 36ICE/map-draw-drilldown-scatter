@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+   
+    
+    
+
+    <link href="https://cdn.bootcss.com/element-ui/2.1.0/theme-chalk/index.css" rel="stylesheet">
+  
+    <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <title>Document</title>
+</head>
+<body>
+        <style>
+                .text {
+                  font-size: 14px;
+                }
+              
+                .item {
+                  margin-bottom: 2px;
+                }
+              
+                .clearfix:before,
+                .clearfix:after {
+                  display: table;
+                  content: "";
+                }
+                .clearfix:after {
+                  clear: both
+                }
+              
+                .box-card {
+                  width: 480px;
+                  height: 300px;
+                }
+              </style>
+     <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+
+     <div id="app" style="width: 1920px">
+            <el-row>
+                <el-col :span="6" style="padding-top: 50px">
+                <el-row>
+                <el-col :span="24">
+                <el-card class="box-card">
+                        <div slot="header" class="clearfix">
+                            <h4>事件</h4>
+                            <el-button style="float: right; padding: 3px 0" type="text"></el-button>
+                        </div>
+                        <div class="text item">
+                                <el-row>
+                                <el-col :span="8">
+                                <h4 style="color:red">125</h4>
+                                </el-col>
+                                <el-col :span="8">
+                                        <h4 style="color:red">125</h4>
+                                </el-col>
+                                <el-col :span="8">
+                                        <h4 style="color:red">125</h4>
+                                </el-col>
+                                </el-row>
+                                <el-row>
+                                <el-col :span="8">
+                                        <h6>事件总数</h6>
+                                        </el-col>
+                                        <el-col :span="8">
+                                        <h6>已确认数</h6>
+                                        </el-col>
+                                        <el-col :span="8">
+                                        <h6>未确认数</h6>
+                                </el-col>
+                                </el-row>
+                        </div>
+                        <hr>
+                        <div v-for="o in 4" :key="o" class="text item">
+                                <el-row>
+                                        <el-col :span="8">
+                                                {{o}}
+                                        </el-col>
+                                        <el-col :span="8">
+                                            事件内容
+                                        </el-col>
+                                        <el-col :span="8">
+                                            已确认
+                                        </el-col>
+                                </el-row>
+                        </div>
+                        </el-card>
+      
+                </el-col>
+                <el-col :span="24">
+                        <el-card class="box-card">
+                                <div slot="header" class="clearfix">
+                                    <h4>工单</h4>
+                                    <el-button style="float: right;" type="text"></el-button>
+                                </div>
+                                <el-table
+                                :data="tableData2"
+                                stripe
+                                style="width: 100%">
+                            
+                                <el-table-column
+                                prop="name"
+                                label="类型"
+                                >
+                                </el-table-column>
+                                <el-table-column
+                                prop="address"
+                                label="内容">
+                                </el-table-column>
+                                <el-table-column
+                                prop="date"
+                                label="日期"
+                               >
+                                </el-table-column>
+                            </el-table>
+                               
+                                </el-card>
+              
+                </el-col>
+                <el-col :span="24">
+                        <el-card class="box-card">
+                                <div slot="header" class="clearfix">
+                                    <h4>热词</h4>
+                                    <el-button style="float: right; padding: 3px 0" type="text"></el-button>
+                                </div>
+                                <my-wordcloud></my-wordcloud>
+                                </el-card>
+              
+                </el-col>
+                </el-row>
+                </el-col>
+
+                <el-col :span="12" style="width: 900px;">
+                <el-row >
+                    <el-col id="main" style="width: 100%;height:900px;" :span="24">
+                            
+                    </el-col>
+                
+                </el-row>
+                </el-col>
+                <el-col :span="6" style="padding-top: 50px">
+                <el-row>
+                <el-col :span="12">
+                <el-card class="box-card">
+                        <div slot="header" class="clearfix">
+                            <h4>活跃度</h4>
+                            <el-button style="float: right; padding: 3px 0" type="text"></el-button>
+                        </div>
+                        <el-table
+                        :data="tableData2"
+                        stripe
+                        style="width: 100%">
+                    
+                        <el-table-column
+                        prop="name"
+                        label="类型"
+                        >
+                        </el-table-column>
+                        <el-table-column
+                        prop="address"
+                        label="内容">
+                        </el-table-column>
+                        <el-table-column
+                        prop="date"
+                        label="日期"
+                       >
+                        </el-table-column>
+                    </el-table>
+                        
+                        </el-card>
+      
+                </el-col>
+                <el-col :span="24">
+                        <el-card class="box-card">
+                                <div slot="header" class="clearfix">
+                                    <h4>满意度</h4>
+                                    <el-button style="float: right; padding: 3px 0" type="text"></el-button>
+                                </div>
+                              
+                                <my-bar1></my-bar1>
+                            
+                                </el-card>
+              
+                </el-col>
+                <el-col :span="24">
+                        <el-card class="box-card">
+                                <div slot="header" class="clearfix">
+                                    <h4>民情</h4>
+                                    <el-button style="float: right; padding: 3px 0" type="text"></el-button>
+                                </div>
+                            
+                                <my-pie1></my-pie1>
+                                </el-card>
+              
+                </el-col>
+                </el-row>
+                </el-col>
+        
+        </el-row>
+   </div>
+
+
+    <template id="my-bar1">
+            <div  id="item5" style="width:90%;height:180px;"></div>
+    </template>
+    <template id="my-pie1">
+            <div id="item6" style="width:90%;height:180px;"></div>
+    </template>
+    <template id="my-wordcloud">
+        <div id="item3" style="width:90%;height:200px;"></div>
+    </template>
+    <!-- import Vue before Element -->
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <!-- import JavaScript -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+     <script src="https://cdn.bootcss.com/jquery/3.3.0/jquery.min.js"></script>
+     <script src="https://cdn.bootcss.com/echarts/4.1.0.rc2/echarts-en.min.js"></script>
+     <script src='./echarts-wordcloud.min.js'></script>
+   <script>
+
+        let cmypie1=Vue.extend({
+            template: '#my-pie1',
+            data(){
+                return{
+                    //url:"../result/queryTeachersScore",
+                    id:"item6",
+                   // myChart:null,
+                   option :{
+                    title : {
+                        text: 'XXX街道民情',
+                        subtext: 'monetware',
+                        x:'center'
+                    },
+                    tooltip : {
+                        trigger: 'item',
+                        formatter: "{a} <br/>{b} : {c} ({d}%)"
+                    },
+                    legend: {
+                        orient: 'vertical',
+                        left: 'left',
+                        data: ['维护维修','环境卫生','停车管理','便民生活','交通出行']
+                    },
+                    series : [
+                        {
+                            name: '民情',
+                            type: 'pie',
+                            radius : '55%',
+                            center: ['50%', '60%'],
+                            data:[
+                                {value:335, name:'维护维修'},
+                                {value:310, name:'环境卫生'},
+                                {value:234, name:'停车管理'},
+                                {value:135, name:'便民生活'},
+                                {value:1548, name:'交通出行'}
+                            ],
+                            itemStyle: {
+                                emphasis: {
+                                    shadowBlur: 10,
+                                    shadowOffsetX: 0,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                }
+                            }
+                        }
+                    ]
+                }
+
+                }
+            },
+            mounted(){
+                /**
+                let self=this;
+                console.log(self);
+                $.ajax({
+                    type:"get",
+                    url:self.url,
+                    success:function (r) {
+                        if(r.code==0){
+
+                            self.option.legend.data.splice(0,self.option.legend.data.length);
+                            self.option.series[0].data.splice(0,self.option.series[0].data.length);
+
+                            for(let i=0;i<r.teachersScore.length;i++){
+                               
+                                self.option.series[0].data.push(r.teachersScore[i]);
+                                self.option.legend.data.push(r.teachersScore[i].name);
+                            }
+                            self.drawPieChart();
+
+                        }else {
+                            alert(r);
+                        }
+                    },
+                    error:function (r) {
+                        alert(r);
+                    }
+                });
+                **/
+                this.drawPieChart();
+            },
+            methods:{
+                drawPieChart() {
+                    let self=this;
+                    let myChart=echarts.init(document.getElementById(self.id));
+                    myChart.setOption(self.option);
+
+                    document.getElementById(self.id).style.width ="90%";
+                    myChart.resize();
+                    window.addEventListener("resize", function () {
+                        //document.getElementById(self.id).style.width ="90%";
+                       // myChart.resize();
+
+                    });
+                },
+
+            }
+
+    });
+        let cmybar1=Vue.extend({
+            template: '#my-bar1',
+            data(){
+                return {
+                    id:"item5",
+                    option: {
+                        title : {
+                            text: '年度满意度',
+                            subtext: '',
+                           /* x:'center'*/
+                        },
+                        tooltip : {
+                            trigger: 'axis'
+                        },
+                        legend: {
+                            data:['2014年', '2012年']
+                        },
+                        toolbox: {
+                            show : true,
+                            feature : {
+                                mark : {show: true},
+                               // dataView : {show: true, readOnly: false},
+                                magicType: {show: true, type: ['line', 'bar']},
+                                restore : {show: true},
+                                saveAsImage : {show: true}
+                            }
+                        },
+                        calculable : true,
+                        grid: { // 控制图的大小，调整下面这些值就可以，
+                            x: 120,
+                            x2: 10,
+                            y2: 20, // y2可以控制 X轴跟Zoom控件之间的间隔，避免以为倾斜后造成 label重叠到zoom上
+                        },
+                        xAxis : [
+                            {
+                                type : 'category',
+                                width:'100%',
+                                data : ['2016','2017','2018','2019']
+                            }
+                        ],
+                        yAxis : [
+                            {
+                                type : 'value',
+                                boundaryGap : [0, 0.001]
+                               
+                            }
+                        ],
+                        series : [
+                            {
+                                name:'2014年',
+                                type:'bar',
+                                data:[92, 87, 75, 91]
+                            },
+                        ]
+                    },
+                }
+            },
+            mounted(){
+                this.drawPieChart();
+
+            },
+            methods:{
+                drawPieChart() {
+                    let self=this;
+                    myChart=echarts.init(document.getElementById(self.id));
+                    myChart.setOption(this.option);
+                    document.getElementById(self.id).style.width ="90%";
+                    myChart.resize();
+                    window.addEventListener("resize", function () {
+                        //document.getElementById(self.id).style.width ="90%";
+                        //myChart.resize();
+
+                    });
+                }
+            }
+
+        });
+        let cmywordcloud=Vue.extend({
+            template: '#my-wordcloud',
+            data(){
+                return {
+                    id:"item3",
+                    option: {
+                tooltip: {},
+                series: [ {
+                    type: 'wordCloud',
+                    gridSize: 2,
+                    sizeRange: [12, 50],
+                    rotationRange: [-90, 90],
+                    shape: 'pentagon',
+                    width: 600,
+                    height: 400,
+                    drawOutOfBound: true,
+                    textStyle: {
+                        normal: {
+                            color: function () {
+                                return 'rgb(' + [
+                                    Math.round(Math.random() * 160),
+                                    Math.round(Math.random() * 160),
+                                    Math.round(Math.random() * 160)
+                                ].join(',') + ')';
+                            }
+                        },
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowColor: '#333'
+                        }
+                    },
+                    data: [
+                        {
+                            name: 'Sam S Club',
+                            value: 10000,
+                            textStyle: {
+                                normal: {
+                                    color: 'black'
+                                },
+                                emphasis: {
+                                    color: 'red'
+                                }
+                            }
+                        },
+                        {
+                            name: 'Macys',
+                            value: 6181
+                        },
+                        {
+                            name: 'Amy Schumer',
+                            value: 4386
+                        },
+                        {
+                            name: 'Jurassic World',
+                            value: 4055
+                        },
+                        {
+                            name: 'Charter Communications',
+                            value: 2467
+                        },
+                        {
+                            name: 'Chick Fil A',
+                            value: 2244
+                        },
+                        {
+                            name: 'Planet Fitness',
+                            value: 1898
+                        },
+                        {
+                            name: 'Pitch Perfect',
+                            value: 1484
+                        },
+                        {
+                            name: 'Express',
+                            value: 1112
+                        },
+                        {
+                            name: 'Home',
+                            value: 965
+                        },
+                        {
+                            name: 'Johnny Depp',
+                            value: 847
+                        },
+                        {
+                            name: 'Lena Dunham',
+                            value: 582
+                        },
+                        {
+                            name: 'Lewis Hamilton',
+                            value: 555
+                        },
+                        {
+                            name: 'KXAN',
+                            value: 550
+                        },
+                        {
+                            name: 'Mary Ellen Mark',
+                            value: 462
+                        },
+                        {
+                            name: 'Farrah Abraham',
+                            value: 366
+                        },
+                        {
+                            name: 'Rita Ora',
+                            value: 360
+                        },
+                        {
+                            name: 'Serena Williams',
+                            value: 282
+                        },
+                        {
+                            name: 'NCAA baseball tournament',
+                            value: 273
+                        },
+                        {
+                            name: 'Point Break',
+                            value: 265
+                        }
+                    ]
+                } ]
+            },
+                }
+            },
+            mounted(){
+                this.drawPieChart();
+
+            },
+            methods:{
+                drawPieChart() {
+                    let self=this;
+                    myChart=echarts.init(document.getElementById(self.id));
+                    myChart.setOption(this.option);
+                    document.getElementById(self.id).style.width ="90%";
+                    myChart.resize();
+                    window.addEventListener("resize", function () {
+                        //document.getElementById(self.id).style.width ="90%";
+                        //myChart.resize();
+
+                    });
+                }
+            }
+
+        });
+        new Vue({
+          el: '#app',
+          data:{
+            tableData2: [{
+            date: '2016-05-02',
+            name: '1',
+            address: '事件内容 1'
+            }, {
+            date: '2016-05-04',
+            name: '2',
+            address: '事件内容 2'
+            }, {
+            date: '2016-05-01',
+            name: '3',
+            address: '事件内容 3'
+            }, {
+            date: '2016-05-03',
+            name: '4',
+            address: '事件内容 4'
+            }],
+          },
+          created:function(){
+
+          },
+          methods:{
+
+          },
+          components:{
+            "my-pie1":cmypie1,
+            'my-bar1':cmybar1,
+            'my-wordcloud':cmywordcloud,
+       }
+        });
+      </script>
+    <script>
+
+     var data = [
+         {name: '标记1', value: '11'},
+         {name: '标记2',value: '12'},
+         {name: '标记3', value: '13'},
+         {name: '标记4', value: '14'},
+         {name: '标记5', value: '15'},
+         {name: '标记6', value: '16'},
+         {name: '标记7', value: '17'},
+         {name: '标记8', value: '18'},
+         {name: '标记9', value: '19'},
+         {name: '标记10', value:'20'}
+        
+    ];
+    var geoCoordMap = {
+    '标记1':[119.18930053710938,
+          32.20989625676041],
+    '标记2':[119.0540313720703,
+          32.17968072060086],
+    '标记3':[118.98262023925781,
+          32.16631295696736],
+    '标记4':[118.99085998535155,
+          32.12910537866883],
+    '标记5':[118.93112182617186,
+          32.12445336381827],
+    '标记6':[118.90571594238281,
+          32.06744693937369],
+    '标记7':[118.89129638671875,
+          32.15410589424405],
+    '标记8':[118.82743835449219,
+          32.13201276750207],
+    '标记9':[118.8006591796875,
+          32.191303267912005],
+    '标记10':[119.12200927734376,
+          32.213382019132254]
+    
+    }
+        //根据data得到每个data中城市的坐标
+        var convertData = function (data) {
+            var res = [];
+            for (var i = 0; i < data.length; i++) {
+                var fromCoord = geoCoordMap[data[i].name];//获取城市的坐标 source
+                var toCoord = geoCoordMap[data[i].value];//获取城市的坐标 destination
+                if (fromCoord && toCoord) {
+                    res.push({
+                        fromName: data[i].name,
+                        toName: data[i].value,
+                        coords: [fromCoord, toCoord]
+                    });
+                }
+            }
+            return res;
+        };
+        //根据data得到放射光标效果图。如果起始城市没有值的话，就只显示目的城市
+        var convertData1 = function (data) { 
+            var res = [];
+            for (var i = 0; i < data.length; i++) {
+               var geoCoord = geoCoordMap[data[i].name];
+               // var geoCoord1 = geoCoordMap[data[i].value];
+              
+                if (geoCoord) 
+                {
+                    res.push({
+                        name: data[i].name,
+                        value: geoCoord.concat(data[i].value)
+                    });
+                }
+              
+              /**
+               if(geoCoord1)
+                {
+                    res.push({
+                        name: data[i].value,
+                        value: geoCoord1.concat(data[i].name)
+                    })
+                }
+                
+               **/
+            }
+            return res;
+        };
+
+
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('main'));
+    myChart.showLoading();
+    function loadMap(mapCode, mapName) {
+    $.get('http://localhost:8080/'+mapName+'.json', function (geoJson) {
+
+        myChart.hideLoading();
+
+        echarts.registerMap('xixiaqu', geoJson);
+
+        myChart.setOption(option = {
+            title: {
+                text: '栖霞区掌上云社区360度全域治理平台',
+                subtext: '萌泰科技',
+                sublink: 'http://www.monetware.com/',
+                left:'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{b}<br/>{c} (情况)'
+            },
+            geo: {
+                    map: 'xixiaqu',
+                    
+                    //是否可以点击鼠标、滚轮缩放
+                    roam: false,
+                  /**
+                    itemStyle:{
+                        normal:{
+                            label:{
+                            show:true
+                        },
+                        areaStyle:{  
+                                color:'white'  
+                            },  
+                        //areaColor: '#eee',
+                        borderColor: '#111'
+                        },
+                       
+                        emphasis:{label:{show:true}}
+                    },
+                    data:[
+                        {name: '八卦洲街道', value: 118.34,itemStyle:{color: "#dd6b66" }},
+                        {name: '马群街道', value: 15477.48,itemStyle:{color: "#dd6b66" }},
+                        {name: '迈皋桥街道', value: 31686.1,itemStyle:{color: "#dd6b66" }},
+                        {name: '燕子矶街道	', value: 6992.6,itemStyle:{color: "#dd6b66" }},
+                        {name: '西岗街道', value: 44045.49,itemStyle:{color: "#dd6b66" }},
+                        {name: '龙潭街道', value: 40689.64,itemStyle:{color: "#dd6b66" }},
+                        {name: '栖霞街道', value: 37659.78,itemStyle:{color: "#dd6b66" }},
+                        {name: 'monetware', value: 45180.97,itemStyle:{color: "#dd6b66" }},
+                        {name: 'demo', value: 55204.26,itemStyle:{color: "#dd6b66" }},
+                        {name: '仙林街道', value: 21900.9,itemStyle:{color: "#dd6b66" }}
+                    
+                    ],
+                    // 自定义名称映射
+                    nameMap: {
+                        'Central and Western': '八卦洲街道',
+                        'Eastern': '迈皋桥街道',
+                        'Islands': 'demo',
+                        'Kowloon City': '栖霞街道',
+                        'Kwai Tsing': 'monetware',
+                        'Kwun Tong': '西岗街道',
+                        'North': '燕子矶街道',
+                        'Sai Kung': '马群街道',
+                        'Sha Tin': '仙林街道',
+                        'Sham Shui Po': '龙潭街道',
+                        'Southern': '燕子矶街道'
+                    
+                    }
+                    **/
+                },
+                visualMap: [
+                {
+                    left: 'right',
+                    top: '5%',
+                    dimension: 2,
+                    min: 10,
+                    max: 20,
+                    //itemWidth: 10,
+                    itemHeight: 80,
+                    calculable: true,
+                    precision: 0.1,
+                    text: ['圆形大小：PM2.5'],
+                    textGap: 30,
+                    textStyle: {
+                        color: '#fff'
+                    },
+                    inRange: {
+                        symbolSize: [9, 20],
+                        colorLightness: [0.8, 0.4]
+                    },
+                    outOfRange: {
+                        symbolSize: [9, 20],
+                        color: ['rgba(255,255,255,.2)'],
+                        
+                    },
+                    controller: {
+                        inRange: {
+                            color: ['#c23531']
+                        },
+                        outOfRange: {
+                            color: ['#444']
+                        }
+                    }
+                }
+        ],
+            series: [
+                
+                {
+                    name: '全域治理',
+                    type: 'map',
+                    mapType: 'xixiaqu', // 自定义扩展图表类型
+                    itemStyle:{
+                        normal:{label:{show:false}},
+                        emphasis:{label:{show:true}}
+                    },
+                    selectedMode : 'single',
+                    data:[
+                        {name: '八卦洲街道', value: 118.34},
+                        {name: '马群街道', value: 15477.48},
+                        {name: '迈皋桥街道', value: 31686.1},
+                        {name: '燕子矶街道	', value: 6992.6},
+                        {name: '西岗街道', value: 44045.49},
+                        {name: '龙潭街道', value: 40689.64},
+                        {name: '栖霞街道', value: 37659.78},
+                        {name: 'monetware', value: 45180.97},
+                        {name: 'demo', value: 55204.26},
+                        {name: '仙林街道', value: 21900.9}
+                        //该百年区域颜色
+                        //{name: '仙林街道', value: 21900.9,itemStyle:{color: "#dd6b66" }
+                    
+                    ],
+                    // 自定义名称映射
+                    nameMap: {
+                        'Central and Western': '八卦洲街道',
+                        'Eastern': '迈皋桥街道',
+                        'Islands': 'demo',
+                        'Kowloon City': '栖霞街道',
+                        'Kwai Tsing': 'monetware',
+                        'Kwun Tong': '西岗街道',
+                        'North': '燕子矶街道',
+                        'Sai Kung': '马群街道',
+                        'Sha Tin': '仙林街道',
+                        'Sham Shui Po': '龙潭街道',
+                        'Southern': '燕子矶街道'
+                    
+                    }
+                    
+                },
+                
+                {
+                    name: 'city',
+                    type: 'effectScatter',
+                    coordinateSystem: 'geo',
+                    rippleEffect: {
+                        brushType: 'stroke'
+                    },
+                    label: {
+                        normal: {
+                            show: false,
+                            position: 'right',
+                            formatter: '{b}'
+                        }  
+                    },
+                    symbolSize: function (val) {
+                        return val[2] / 1;
+                    },
+                    //symbolSize: 8,
+                    itemStyle: {
+                        normal: {
+                            color: '#ff0000'
+                        }
+                    },
+                    data: convertData1(data)
+                 },
+            ]
+        });
+        window.onresize = myChart.resize;
+        curMap = {
+            mapCode: mapCode,
+            mapName: mapName
+         };     
+    });
+    }
+    //调用
+   loadMap(12, 'map') ;
+    //存储切换的每一级地图信息
+    var mapStack = [];
+    var timeFn = null;
+    var curMap = {};
+    /**
+    绑定用户切换地图区域事件
+    cityMap对象存储着地图区域名称和区域的信息(name-code)
+    当mapCode有值,说明可以切换到下级地图
+    同时保存上级地图的编号和名称  
+    */
+   /**
+    myChart.on('mapselectchanged', function(params) {
+        clearTimeout(timeFn);
+        //由于单击事件和双击事件冲突，故单击的响应事件延迟250毫秒执行
+        timeFn = setTimeout(function(){
+            var name = params.batch[0].name;
+            console.log(name);
+            //var mapCode = cityMap[name];
+           
+            loadMap(111, name); 
+            //将上一级地图信息压入mapStack
+            console.log(curMap.mapName);
+            mapStack.push({
+                mapCode: curMap.mapCode,
+                mapName: curMap.mapName
+            }); 
+        }, 250);   
+    });
+    **/
+    /**
+    绑定双击事件，并加载上一级地图
+    */
+    myChart.on('dblclick', function(params) {
+        //当双击事件发生时，清除单击事件，仅响应双击事件
+        clearTimeout(timeFn);
+        var map = mapStack.pop();
+        if (!mapStack.length && !map) {
+            alert('已经到达最上一级地图了');
+            return;
+        }
+        loadMap(map.mapCode, map.mapName);
+    });
+
+    </script>
+
+</body>
+</html>
+
